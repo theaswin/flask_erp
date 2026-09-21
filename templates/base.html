@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% block title %}Acme ERP{% endblock %}</title>
+	<style>
+		:root{--blue:#2563eb;--navy:#172033;--muted:#64748b;--bg:#f5f7fb}*{box-sizing:border-box}body{margin:0;font:15px Arial,sans-serif;color:var(--navy);background:var(--bg)}.shell{display:flex;min-height:100vh}aside{width:230px;padding:28px 18px;background:var(--navy);color:#fff}.brand{margin:0 12px 34px;font-size:22px}nav a{display:block;padding:12px;color:#cbd5e1;text-decoration:none;border-radius:8px}nav a:hover,nav .active{color:#fff;background:var(--blue)}main{flex:1;padding:32px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}h1{margin:0 0 6px;font-size:28px}.muted{color:var(--muted)}.user,.card,.panel{background:#fff;border-radius:12px;box-shadow:0 2px 8px #1720330d}.user{padding:10px 14px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:24px}.card{padding:20px}.label{display:block;color:var(--muted);font-size:13px}.number{display:block;margin-top:10px;font-size:26px;font-weight:bold}.columns{display:grid;grid-template-columns:1.4fr 1fr;gap:24px}.panel{padding:22px}h2{margin:0 0 16px;font-size:18px}.row{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px solid #e2e8f0}.row:last-child{border:0}.actions{display:flex;gap:10px;flex-wrap:wrap}.actions a{padding:12px;color:var(--blue);text-decoration:none;background:#eff6ff;border-radius:8px}.customer-table{width:100%;border-collapse:collapse}.customer-table th,.customer-table td{text-align:left;padding:14px 10px;border-bottom:1px solid #e2e8f0}.customer-table th{color:var(--muted);font-size:13px}@media(max-width:800px){aside{width:180px}.cards,.columns{grid-template-columns:1fr 1fr}}@media(max-width:560px){.shell{display:block}aside{width:100%}main{padding:20px}.cards,.columns{grid-template-columns:1fr}header{align-items:flex-start;gap:15px;flex-direction:column}.customer-table{font-size:13px}}
+	</style>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+	<div class="shell">
+		<aside>
+			<h2 class="brand">Acme ERP</h2>
+			<nav>
+				<a class="{{ 'active' if request.endpoint == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}">Dashboard</a>
+				<a href="{{ url_for('customers') }}">Customers</a>
+				<a href="#">Sales</a>
+				<a href="#">Inventory</a>
+				<a href="#">Employees</a>
+				<a href="#">Reports</a>
+				<a href="#">Settings</a>
+			</nav>
+		</aside>
+		<main>
+			<header>
+				<div>
+					<h1>{% block heading %}{% endblock %}</h1>
+					<span class="muted">{% block subheading %}{% endblock %}</span>
+				</div>
+				<div class="user">Admin ▾</div>
+			</header>
+			{% block content %}{% endblock %}
+		</main>
+	</div>
+</body>
+</html>

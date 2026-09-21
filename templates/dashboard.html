@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}ERP Dashboard{% endblock %}
+{% block heading %}Good morning!{% endblock %}
+{% block subheading %}Here is today's business overview.{% endblock %}
+
+{% block content %}
+	<section class="cards">
+		<div class="card"><span class="label">Total revenue</span><span class="number">$24,580</span></div>
+		<div class="card"><span class="label">Orders</span><span class="number">184</span></div>
+		<div class="card"><span class="label">Low stock items</span><span class="number">12</span></div>
+		<div class="card"><span class="label">Team members</span><span class="number">36</span></div>
+	</section>
+	<section class="columns">
+		<div class="panel"><h2>Recent activity</h2><div class="row"><span>New order #1048</span><span class="muted">10 min ago</span></div><div class="row"><span>Invoice #302 paid</span><span class="muted">1 hour ago</span></div><div class="row"><span>Stock updated</span><span class="muted">Yesterday</span></div></div>
+		<div class="panel"><h2>Quick actions</h2><div class="actions"><a href="#">+ New order</a><a href="#">Add product</a><a href="#">View reports</a></div></div>
+	</section>
+{% endblock %}

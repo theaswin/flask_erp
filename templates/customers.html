@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block title %}Customers | Acme ERP{% endblock %}
+{% block heading %}Customers{% endblock %}
+{% block subheading %}Create and manage your customer records.{% endblock %}
+
+{% block content %}
+
+<style>
+    /* Customer creation form - single row */
+    .customer-form {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr auto;
+        gap: 12px;
+        align-items: end;
+    }
+
+    .customer-form label {
+        display: grid;
+        gap: 6px;
+        font-weight: bold;
+    }
+
+    .customer-form input {
+        padding: 11px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font: inherit;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    .customer-form button {
+        padding: 11px 18px;
+        border: 0;
+        border-radius: 8px;
+        color: #fff;
+        background: var(--blue);
+        font: inherit;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+
+    /* 7 cards in one row */
+    .customer-grid {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 24px;
+    }
+
+    .customer-card {
+        padding: 16px;
+        min-width: 0;
+    }
+
+    .customer-card h3 {
+        margin: 0 0 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .customer-card p {
+        margin: 7px 0;
+        color: var(--muted);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .customer-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 15px;
+}
+
+.no-image {
+    background: #e2e8f0;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .customer-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 800px) {
+        .customer-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .customer-form {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+
+<!-- CREATE CUSTOMER -->
+<section class="panel">
+
+    <h2>Create customer</h2>
+
+    <form class="customer-form" method="post" enctype="multipart/form-data">
+
+        <label for="image">
+            Image
+            <input id="image" name="image" type="file">
+        </label>
+
+        <label for="Name">
+            Name
+            <input id="name" name="name" required>
+        </label>
+
+        <label for="email">
+            Email
+            <input id="email" name="email" type="email" required>
+        </label>
+
+        <label for="phone">
+            Phone
+            <input id="phone" name="phone" required>
+        </label>
+
+        <button type="submit">
+            Create customer
+        </button>
+
+    </form>
+
+</section>
+
+
+<!-- CUSTOMER CARDS -->
+<section class="customer-grid">
+
+    {% for customer in customers %}
+
+        <article class="panel customer-card">
+
+            {% if customer.image %}
+                <img
+                    src="{{ url_for('customer_image', customer_id=customer.id) }}"
+                    alt="{{ customer.name }}"
+                    class="customer-logo"
+                >
+            {% else %}
+                <div class="customer-logo no-image">
+                    No Image
+                </div>
+            {% endif %}
+
+            <h3>{{ customer.name }}</h3>
+
+            <p>{{ customer.email }}</p>
+            <p>{{ customer.phone }}</p>
+
+            <!-- Delete button -->
+            <form method="post"
+                  action="{{ url_for('delete_customer', customer_id=customer.id) }}"
+                  class="delete-form">
+
+                <button type="submit"
+                        class="delete-btn"
+                        title="Delete customer"
+                        onclick="return confirm('Delete {{ customer.name }}?');">
+
+                    <i class="fa-solid fa-trash"></i>
+
+                </button>
+
+            </form>
+
+        </article>
+
+    {% else %}
+
+        <div class="panel customer-card">
+            <p>No customers created yet.</p>
+        </div>
+
+    {% endfor %}
+
+</section>
+{% endblock %}
