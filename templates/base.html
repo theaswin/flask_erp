@@ -17,6 +17,8 @@
 			<nav>
 				<a class="{{ 'active' if request.endpoint == 'dashboard' else '' }}" href="{{ url_for('dashboard') }}">Dashboard</a>
 				<a href="{{ url_for('customers') }}">Customers</a>
+				<a class="{{ 'active' if request.endpoint == 'customers' else '' }}" href="{{ url_for('customers') }}">Customers</a>
+                <a class="{{ 'active' if request.endpoint == 'products' else '' }}" href="{{ url_for('products') }}">Products</a>
 				<a href="#">Sales</a>
 				<a href="#">Inventory</a>
 				<a href="#">Employees</a>

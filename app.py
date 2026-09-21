@@ -1,7 +1,7 @@
 import os
 from flask import Flask, Response, redirect, render_template, request, url_for
 from sqlalchemy import inspect, text
-from models import Customer, db
+from models import db ,Customer , Products , SaleOrders
 from sqlalchemy import inspect, text
 
 app = Flask(__name__)
@@ -120,7 +120,25 @@ def customers():
     customers = Customer.query.all()
     return render_template('customers.html', customers=customers)
 
+@app.route('/products',methods=['GET', 'POST'])
+def products():
+    if request.method == 'POST':
+        image = request.files.get('image')
+        product = Products(
+            image=image.read() if image and image.filename else None,
+            name=request.form['name'],
+            description=request.form['description'],
+            price=request.form['price'],
+            stock_quantity=request.form['stock_quantity'],
+        )
+        db.session.add(product)
+        db.session.commit()
+        return redirect(url_for('products'))
 
+    products = Products.query.all()
+    return render_template('products.html', products=products)
+
+# ============================================================================
 @app.route('/customers/<int:customer_id>/image')
 def customer_image(customer_id):
     customer = db.get_or_404(Customer, customer_id)
@@ -138,11 +156,29 @@ def customer_image(customer_id):
         mimetype = 'application/octet-stream'
     return Response(customer.image, mimetype=mimetype)
 
+@app.route('/products/<int:product_id>/image')
+def product_image(product_id):
+    product = db.get_or_404(Products, product_id)
+    if not product.image:
+        return '', 404
+    if product.image.startswith(b'\x89PNG'):
+        mimetype = 'image/png'
+    elif product.image.startswith(b'\xff\xd8\xff'):
+        mimetype = 'image/jpeg'
+    elif product.image.startswith((b'GIF87a', b'GIF89a')):
+        mimetype = 'image/gif'
+    elif product.image.startswith(b'RIFF') and product.image[8:12] == b'WEBP':
+        mimetype = 'image/webp'
+    else:
+        mimetype = 'application/octet-stream'
+    return Response(product.image, mimetype=mimetype)
 
-@app.route('/customers/<int:customer_id>/delete', methods=['POST'])
-def delete_customer(customer_id):
-    customer = db.get_or_404(Customer, customer_id)
-    db.session.delete(customer)
+# ===========================================================================
+
+@app.route('/products/<int:product_id>/delete', methods=['POST'])
+def delete_product(product_id):
+    product = db.get_or_404(Products, product_id)
+    db.session.delete(product)
     db.session.commit()
     return redirect(url_for('customers'))
 
